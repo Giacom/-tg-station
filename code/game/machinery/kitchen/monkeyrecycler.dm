@@ -38,12 +38,12 @@
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
 	if (src.stat != 0) //NOPOWER etc
 		return
-	if(grinded >=4)
+	if(grinded >= 5)
 		user << "\blue The machine hisses loudly as it condenses the grinded monkey meat. After a moment, it dispenses a brand new monkey cube."
 		playsound(src.loc, 'sound/machines/hiss.ogg', 50, 1)
-		grinded -= 4
+		grinded -= 5
 		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src.loc)
 		user << "\blue The machine's display flashes that it has [grinded] monkeys worth of material left."
 	else
-		user << "\red The machine needs at least 4 monkeys worth of material to produce a monkey cube. It only has [grinded]."
+		user << "\red The machine needs at least 5 monkeys worth of material to produce a monkey cube. It only has [grinded]."
 	return
