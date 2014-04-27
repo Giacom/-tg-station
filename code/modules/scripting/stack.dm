@@ -21,3 +21,40 @@
 
 		Clear()
 			contents.Cut()
+
+		Length()
+			return contents.len
+
+		Swap(value)
+			if(value)
+				if(value > contents.len)
+					return 0
+				if(value <= 0)
+					return 0
+				var/temp = contents[value]
+				contents[value] = Top()
+				contents[contents.len] = temp
+			else
+				var/top = Pop()
+				var/second_top = Pop()
+				Push(top)
+				Push(second_top)
+
+
+/stack/bytecode
+	var/limit = 128
+
+/stack/bytecode/Push(value)
+	if(limit <= Length())
+		return
+	..(value)
+
+/stack/bytecode/Pop()
+	. = ..()
+	if(!.)
+		. = 0
+
+/stack/bytecode/Top()
+	. = ..()
+	if(!.)
+		. = 0

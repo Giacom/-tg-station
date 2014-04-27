@@ -361,3 +361,9 @@ var/list/binary = list("0","1")
 		temp = findtextEx(haystack, ascii2text(text2ascii(needles,i)), start, end)	//Note: ascii2text(text2ascii) is faster than copytext()
 		if(temp)	end = temp
 	return end
+
+/proc/get_type_name(var/type)
+	if(ispath(type))
+		type = "[type]"
+	var/list/split = text2list(type, "/")
+	return split[split.len]

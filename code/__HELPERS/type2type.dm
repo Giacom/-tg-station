@@ -184,6 +184,14 @@ proc/tg_list2text(list/list, glue=",")
 		last_found = found + delim_len
 	while(found)
 
+/proc/text2listascii(text)
+	. = list()
+	var/count = 1
+	do
+		. += text2ascii(text, count)
+		count++
+	while(length(text) >= count)
+
 //Splits the text of a file at seperator and returns them in a list.
 /proc/file2list(filename, seperator="\n")
 	return text2list(return_file_text(filename),seperator)

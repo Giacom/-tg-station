@@ -222,6 +222,9 @@
 /*/obj/item/weapon/circuitboard/prison_shuttle
 	name = "circuit board (Prison Shuttle)"
 	build_path = /obj/machinery/computer/prison_shuttle*/
+/obj/item/weapon/circuitboard/programmable
+	name = "circuit board (Programmable Computer)"
+	build_path = /obj/machinery/computer/programmable
 
 
 /obj/item/weapon/circuitboard/supplycomp/attackby(obj/item/I as obj, mob/user as mob)

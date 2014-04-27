@@ -1,0 +1,93 @@
+#
+# [1, 2, 3, 4] is the Memory Stack, these are here to
+# keep track of what should be in the memory stack after the instruction is executed.
+#
+##########  Main  ###########
+JUMP_POINT main # Start
+
+	CLEAR # Clear the memory stack
+
+	JUMP_RETURN checkInput # returns [0 or 1]
+	
+	JUMP_COMPARE_RETURN loadChars
+
+JUMP main # Restart
+
+
+########## checkInput #########
+JUMP_POINT checkInput
+
+	# Add one to our loop counter.
+	GET beef
+	PUSH 1
+	ADD
+	SET beef
+	SLEEP_UNTIL_INPUT
+	# Check if we have input
+	INPUT_POP # [0 or 2]
+	PUSH 2 # 2 = start text indicator [0 or 2, 2]
+	CMP_EQUAL # [0 or 1]
+
+RETURN 
+
+JUMP_POINT loadChars
+	JUMP_RETURN printChars
+	LOAD_BUFFER
+	POP # Remove the excess
+RETURN
+
+########### printChars ###########
+JUMP_POINT printChars
+	INPUT_POP
+	# [ASCII or 3]
+	
+	COPY 1
+	PUSH 3 		# End text indicator
+	# [ ASCII or 3, ASCII or 3, 3]
+	
+	CMP_EQUAL 	
+	# [ASCII or 3, 0 or 1 ]
+	
+	RETURN_COMPARE
+	# [ASCII or 3]
+	
+	# If we haven't jumped, then we are receiving text.
+	# [ASCII]
+	JUMP_RETURN print_next # []
+	JUMP printChars # Loop again
+RETURN
+
+
+JUMP_POINT print_next
+	PRINT_STACK
+	
+	GET_MAX_BUFFER_X
+	GET_BUFFER_POINTER_X
+	
+	CMP_LESSER # 16 > 32
+	JUMP_COMPARE_RETURN next_buffer_x
+	
+	GET_MAX_BUFFER_X
+	GET_BUFFER_POINTER_X	
+	
+	CMP_EQUAL # 16 == 32
+	JUMP_COMPARE_RETURN next_buffer_y
+	
+RETURN
+
+JUMP_POINT next_buffer_x
+	GET_BUFFER_POINTER_X
+	PUSH 1
+	ADD
+	SET_BUFFER_POINTER_X
+RETURN
+
+JUMP_POINT next_buffer_y
+	GET_BUFFER_POINTER_Y
+	PUSH 1
+	ADD
+	SET_BUFFER_POINTER_Y
+	
+	PUSH 1
+	SET_BUFFER_POINTER_X
+RETURN
