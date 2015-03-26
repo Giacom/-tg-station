@@ -1,7 +1,7 @@
 /world
 	mob = /mob/new_player
 	turf = /turf/space
-	area = /area
+	area = /area/space
 	view = "15x15"
 	cache_lifespan = 1
 
@@ -143,7 +143,7 @@
 		s["host"] = host ? host : null
 
 		var/admins = 0
-		for(var/client/C in admins)
+		for(var/client/C in clients)
 			if(C.holder)
 				if(C.holder.fakekey)
 					continue	//so stealthmins aren't revealed by the hub
@@ -204,7 +204,7 @@
 				if(C.is_afk(INACTIVITY_KICK))
 					if(!istype(C.mob, /mob/dead))
 						log_access("AFK: [key_name(C)]")
-						C << "\red You have been inactive for more than 10 minutes and have been disconnected."
+						C << "<span class='danger'>You have been inactive for more than 10 minutes and have been disconnected.</span>"
 						del(C)
 #undef INACTIVITY_KICK
 

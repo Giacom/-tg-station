@@ -7,7 +7,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 				"asteroid","asteroid_dug",
 				"asteroid0","asteroid1","asteroid2","asteroid3","asteroid4",
 				"asteroid5","asteroid6","asteroid7","asteroid8","asteroid9","asteroid10","asteroid11","asteroid12",
-				"oldburning","light-on-r","light-on-y","light-on-g","light-on-b", "wood", "wood-broken", "carpet",
+				"oldburning","light-on-r","light-on-y","light-on-g","light-on-b", "wood", "wood-broken",
 				"carpetcorner", "carpetside", "carpet", "ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5",
 				"ironsand6", "ironsand7", "ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
@@ -113,46 +113,48 @@ turf/simulated/floor/proc/update_icon()
 				icon_state = "grass[pick("1","2","3","4")]"
 	else if(is_carpet_floor())
 		if(!broken && !burnt)
-			if(icon_state == "carpet")
-				var/connectdir = 0
-				for(var/direction in cardinal)
-					if(istype(get_step(src,direction),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,direction)
-						if(FF.is_carpet_floor())
-							connectdir |= direction
+			if(icon_state == "carpetsymbol") //le snowflake :^)
+				return
 
-				//Check the diagonal connections for corners, where you have, for example, connections both north and east. In this case it checks for a north-east connection to determine whether to add a corner marker or not.
-				var/diagonalconnect = 0 //1 = NE; 2 = SE; 4 = NW; 8 = SW
+			var/connectdir = 0
+			for(var/direction in cardinal)
+				if(istype(get_step(src,direction),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,direction)
+					if(FF.is_carpet_floor())
+						connectdir |= direction
 
-				//Northeast
-				if(connectdir & NORTH && connectdir & EAST)
-					if(istype(get_step(src,NORTHEAST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,NORTHEAST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 1
+			//Check the diagonal connections for corners, where you have, for example, connections both north and east. In this case it checks for a north-east connection to determine whether to add a corner marker or not.
+			var/diagonalconnect = 0 //1 = NE; 2 = SE; 4 = NW; 8 = SW
 
-				//Southeast
-				if(connectdir & SOUTH && connectdir & EAST)
-					if(istype(get_step(src,SOUTHEAST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,SOUTHEAST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 2
+			//Northeast
+			if(connectdir & NORTH && connectdir & EAST)
+				if(istype(get_step(src,NORTHEAST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,NORTHEAST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 1
 
-				//Northwest
-				if(connectdir & NORTH && connectdir & WEST)
-					if(istype(get_step(src,NORTHWEST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,NORTHWEST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 4
+			//Southeast
+			if(connectdir & SOUTH && connectdir & EAST)
+				if(istype(get_step(src,SOUTHEAST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,SOUTHEAST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 2
 
-				//Southwest
-				if(connectdir & SOUTH && connectdir & WEST)
-					if(istype(get_step(src,SOUTHWEST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,SOUTHWEST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 8
+			//Northwest
+			if(connectdir & NORTH && connectdir & WEST)
+				if(istype(get_step(src,NORTHWEST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,NORTHWEST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 4
 
-				icon_state = "carpet[connectdir]-[diagonalconnect]"
+			//Southwest
+			if(connectdir & SOUTH && connectdir & WEST)
+				if(istype(get_step(src,SOUTHWEST),/turf/simulated/floor))
+					var/turf/simulated/floor/FF = get_step(src,SOUTHWEST)
+					if(FF.is_carpet_floor())
+						diagonalconnect |= 8
+
+			icon_state = "carpet[connectdir]-[diagonalconnect]"
 
 	else if(is_wood_floor())
 		if(!broken && !burnt)
@@ -197,13 +199,13 @@ turf/simulated/floor/proc/update_icon()
 	break_tile()
 
 /turf/simulated/floor/is_plasteel_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/plasteel))
+	if(istype(floor_tile, /obj/item/stack/tile/plasteel))
 		return 1
 	else
 		return 0
 
 /turf/simulated/floor/is_light_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/light))
+	if(istype(floor_tile, /obj/item/stack/tile/light))
 		return 1
 	else
 		return 0
@@ -322,7 +324,7 @@ turf/simulated/floor/proc/update_icon()
 	intact = 1
 	SetLuminosity(0)
 	if(T)
-		if(istype(T,/obj/item/stack/tile/plasteel))
+		if(istype(T, /obj/item/stack/tile/plasteel))
 			floor_tile = T
 			if (icon_regular_floor)
 				icon_state = icon_regular_floor
@@ -426,18 +428,18 @@ turf/simulated/floor/proc/update_icon()
 				qdel(C)
 				T.state = C //fixing it by bashing it with a light bulb, fun eh?
 				update_icon()
-				user << "\blue You replace the light bulb."
+				user << "<span class='notice'>You replace the light bulb.</span>"
 			else
-				user << "\blue The lightbulb seems fine, no need to replace it."
+				user << "<span class='notice'>The lightbulb seems fine, no need to replace it.</span>"
 
 	if(istype(C, /obj/item/weapon/crowbar) && (!(is_plating())))
 		if(broken || burnt)
-			user << "\red You remove the broken plating."
+			user << "<span class='danger'>You remove the broken plating.</span>"
 		else
 			if(is_wood_floor())
-				user << "\red You forcefully pry off the planks, destroying them in the process."
+				user << "<span class='danger'>You forcefully pry off the planks, destroying them in the process.</span>"
 			else
-				user << "\red You remove the [floor_tile.name]."
+				user << "<span class='danger'>You remove the [floor_tile.name].</span>"
 				new floor_tile.type(src)
 
 		make_plating()
@@ -450,7 +452,7 @@ turf/simulated/floor/proc/update_icon()
 			return
 		else
 			if(is_wood_floor())
-				user << "\red You unscrew the planks."
+				user << "<span class='danger'>You unscrew the planks.</span>"
 				new floor_tile.type(src)
 
 		make_plating()
@@ -461,24 +463,30 @@ turf/simulated/floor/proc/update_icon()
 	if(istype(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
 		if (is_plating())
-			if (R.amount >= 2)
-				user << "\blue Reinforcing the floor..."
-				if(do_after(user, 30) && R && R.amount >= 2 && is_plating())
-					ChangeTurf(/turf/simulated/floor/engine)
-					playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
-					R.use(2)
-					return
+			if (R.get_amount() < 2)
+				user << "<span class='warning'>You need two rods to make a reinforced floor.</span>"
+				return
 			else
-				user << "\red You need more rods."
+				user << "<span class='notice'>Reinforcing the floor...</span>"
+				if(do_after(user, 30))
+					if (R.get_amount() >= 2 && is_plating())
+						ChangeTurf(/turf/simulated/floor/engine)
+						playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
+						R.use(2)
+						user << "<span class='notice'>You have reinforced the floor.</span>"
+					return
 		else
-			user << "\red You must remove the plating first."
+			user << "<span class='warning'>You must remove the plating first.</span>"
 		return
 
 	if(istype(C, /obj/item/stack/tile))
 		if(is_plating())
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
-				floor_tile = new T.type
+				if(istype(T, /obj/item/stack/tile/plasteel/cyborg))
+					floor_tile = new /obj/item/stack/tile/plasteel
+				else
+					floor_tile = new T.type
 				intact = 1
 				if(istype(T,/obj/item/stack/tile/light))
 					var/obj/item/stack/tile/light/L = T
@@ -500,7 +508,7 @@ turf/simulated/floor/proc/update_icon()
 				levelupdate()
 				playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 			else
-				user << "\blue This section is too damaged to support a tile. Use a welder to fix the damage."
+				user << "<span class='notice'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>"
 
 
 	if(istype(C, /obj/item/stack/cable_coil))
@@ -512,26 +520,26 @@ turf/simulated/floor/proc/update_icon()
 					return
 			coil.turf_place(src, user)
 		else
-			user << "\red You must remove the plating first."
+			user << "<span class='warning'>You must remove the plating first.</span>"
 
 	if(istype(C, /obj/item/weapon/shovel))
 		if(is_grass_floor())
 			new /obj/item/weapon/ore/glass(src)
 			new /obj/item/weapon/ore/glass(src) //Make some sand if you shovel grass
-			user << "\blue You shovel the grass."
+			user << "<span class='notice'>You shovel the grass.</span>"
 			make_plating()
 		else
-			user << "\red You cannot shovel this."
+			user << "<span class='danger'>You cannot shovel this.</span>"
 
 	if(istype(C, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
 				if(welder.remove_fuel(0,user))
-					user << "\red You fix some dents on the broken plating."
+					user << "<span class='danger'>You fix some dents on the broken plating.</span>"
 					playsound(src, 'sound/items/Welder.ogg', 80, 1)
 					icon_state = icon_plating
 					burnt = 0
 					broken = 0
 				else
-					user << "\blue You need more welding fuel to complete this task."
+					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"

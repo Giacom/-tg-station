@@ -89,7 +89,9 @@
 		if(w_items + I.w_class > 5)
 			user << "<span class='notice'>The cistern is full.</span>"
 			return
-		user.drop_item()
+		if(!user.drop_item())
+			user << "<span class='notice'>\The [I] is stuck to your hand, you cannot put it in the cistern!</span>"
+			return
 		I.loc = src
 		w_items += I.w_class
 		user << "<span class='notice'>You carefully place [I] into the cistern.</span>"
@@ -151,12 +153,10 @@
 /obj/machinery/shower/attack_hand(mob/M)
 	on = !on
 	update_icon()
+	add_fingerprint(M)
 	if(on)
-		if (M.loc == loc)
-			wash(M)
-			check_heat(M)
 		for (var/atom/movable/G in loc)
-			G.clean_blood()
+			Crossed(G)
 
 
 /obj/machinery/shower/attackby(obj/item/I, mob/user)
@@ -172,7 +172,9 @@
 					watertemp = "boiling"
 				if("boiling")
 					watertemp = "normal"
-			user.visible_message("<span class='notice'>[user] adjusts the shower with the [I].</span>", "<span class='notice'>You adjust the shower with the [I].</span>")
+			user.visible_message("<span class='notice'>[user] adjusts the shower with the [I].</span>", "<span class='notice'>You adjust the shower with the [I] to [watertemp] temperature.</span>")
+			log_game("[key_name(user)] has wrenched a shower to [watertemp] at ([x],[y],[z])")
+			add_hiddenprint(user)
 
 
 /obj/machinery/shower/update_icon()	//this is terribly unreadable, but basically it makes the shower mist up

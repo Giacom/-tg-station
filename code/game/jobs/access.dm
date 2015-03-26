@@ -62,6 +62,8 @@
 /var/const/access_gateway = 62
 /var/const/access_sec_doors = 63 // Security front doors
 /var/const/access_mineral_storeroom = 64
+/var/const/access_minisat = 65
+/var/const/access_weapons = 66 //Weapon authorization for secbots
 
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
@@ -196,9 +198,9 @@
 	            access_tech_storage, access_chapel_office, access_atmospherics, access_kitchen,
 	            access_bar, access_janitor, access_crematorium, access_robotics, access_cargo, access_construction,
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_cmo, access_qm, access_surgery,
-	            access_theatre, access_research, access_mining, access_mailsorting,
+	            access_theatre, access_research, access_mining, access_mailsorting, access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
-	            access_keycard_auth, access_tcomsat, access_gateway, access_mineral_storeroom)
+	            access_keycard_auth, access_tcomsat, access_gateway, access_mineral_storeroom, access_minisat)
 
 /proc/get_all_centcom_access()
 	return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_medical, access_cent_living, access_cent_storage, access_cent_teleporter, access_cent_captain)
@@ -213,13 +215,13 @@
 		if(1) //station general
 			return list(access_kitchen,access_bar, access_hydroponics, access_janitor, access_chapel_office, access_crematorium, access_library, access_theatre, access_lawyer)
 		if(2) //security
-			return list(access_sec_doors, access_security, access_brig, access_armory, access_forensics_lockers, access_court, access_hos)
+			return list(access_sec_doors, access_weapons, access_security, access_brig, access_armory, access_forensics_lockers, access_court, access_hos)
 		if(3) //medbay
 			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_virology, access_surgery, access_cmo)
 		if(4) //research
-			return list(access_research, access_tox, access_tox_storage, access_genetics, access_robotics, access_xenobiology, access_rd)
+			return list(access_research, access_tox, access_tox_storage, access_genetics, access_robotics, access_xenobiology, access_minisat, access_rd)
 		if(5) //engineering and maintenance
-			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_atmospherics, access_tcomsat, access_ce)
+			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_atmospherics, access_tcomsat, access_minisat, access_ce)
 		if(6) //supply
 			return list(access_mailsorting, access_mining, access_mining_station, access_mineral_storeroom, access_cargo, access_qm)
 		if(7) //command
@@ -289,7 +291,7 @@
 		if(access_change_ids)
 			return "ID Console"
 		if(access_ai_upload)
-			return "AI Upload"
+			return "AI Chambers"
 		if(access_teleporter)
 			return "Teleporter"
 		if(access_eva)
@@ -370,6 +372,10 @@
 			return "Brig"
 		if(access_mineral_storeroom)
 			return "Mineral Storage"
+		if(access_minisat)
+			return "AI Satellite"
+		if(access_weapons)
+			return "Weapon Permit"
 
 /proc/get_centcom_access_desc(A)
 	switch(A)

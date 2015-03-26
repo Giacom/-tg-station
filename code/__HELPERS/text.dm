@@ -15,9 +15,8 @@
 
 // Run all strings to be used in an SQL query through this proc first to properly escape out injection attempts.
 /proc/sanitizeSQL(var/t as text)
-	var/sanitized_text = replacetext(t, "'", "\\'")
-	sanitized_text = replacetext(sanitized_text, "\"", "\\\"")
-	return sanitized_text
+	var/sqltext = dbcon.Quote(t);
+	return copytext(sqltext, 2, lentext(sqltext));//Quote() adds quotes around input, we already do that
 
 /*
  * Text sanitization
@@ -361,9 +360,3 @@ var/list/binary = list("0","1")
 		temp = findtextEx(haystack, ascii2text(text2ascii(needles,i)), start, end)	//Note: ascii2text(text2ascii) is faster than copytext()
 		if(temp)	end = temp
 	return end
-
-/proc/get_type_name(var/type)
-	if(ispath(type))
-		type = "[type]"
-	var/list/split = text2list(type, "/")
-	return split[split.len]

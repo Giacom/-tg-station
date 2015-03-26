@@ -23,7 +23,7 @@
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 
-	//Space carp aren't affected by atmos.
+	//Space carp aren't affected by cold.
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
@@ -33,8 +33,9 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+	maxbodytemp = 1500
 
-	faction = "carp"
+	faction = list("carp")
 
 /mob/living/simple_animal/hostile/carp/Process_Spacemove(var/check_drift = 0)
 	return 1	//No drifting in space for space carp!	//original comments do not steal
@@ -55,6 +56,7 @@
 /mob/living/simple_animal/hostile/carp/holocarp
 	icon_state = "holocarp"
 	icon_living = "holocarp"
+	maxbodytemp = INFINITY
 
 /mob/living/simple_animal/hostile/carp/holocarp/Die()
 	qdel(src)

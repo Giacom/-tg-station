@@ -5,18 +5,16 @@
 /mob/living/carbon/alien
 	name = "alien"
 	voice_name = "alien"
-	voice_message = "hisses"
 	say_message = "hisses"
 	icon = 'icons/mob/alien.dmi'
 	gender = NEUTER
 	dna = null
-	faction = "alien"
+	faction = list("alien")
 	ventcrawler = 2
+	languages = ALIEN
 
 	var/storedPlasma = 250
 	var/max_plasma = 500
-
-	alien_talk_understand = 1
 
 	var/obj/item/weapon/card/id/wear_id = null // Fix for station bounced radios -- Skie
 	var/has_fine_manipulation = 0
@@ -157,6 +155,9 @@
 /mob/living/carbon/alien/IsAdvancedToolUser()
 	return has_fine_manipulation
 
+/mob/living/carbon/alien/SpeciesCanConsume()
+	return 1 // Aliens can eat, and they can be fed food/drink
+
 /mob/living/carbon/alien/Process_Spaceslipping()
 	return 0 // Don't slip in space.
 
@@ -188,6 +189,10 @@
 /mob/living/carbon/alien/getTrail()
 	return "xltrails"
 
+/mob/living/carbon/alien/cuff_break(obj/item/I, mob/living/carbon/C)
+	playsound(C, 'sound/voice/hiss5.ogg', 40, 1, 1)  //Alien roars when breaking free.
+	..()
+
 /*----------------------------------------
 Proc: AddInfectionImages()
 Des: Gives the client of the alien an image on each infected mob.
@@ -212,6 +217,9 @@ Des: Removes all infected images from the alien.
 			if(dd_hasprefix_case(I.icon_state, "infected"))
 				qdel(I)
 	return
+
+/mob/living/carbon/alien/canBeHandcuffed()
+	return 1
 
 #undef HEAT_DAMAGE_LEVEL_1
 #undef HEAT_DAMAGE_LEVEL_2

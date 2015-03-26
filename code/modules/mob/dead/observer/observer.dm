@@ -10,6 +10,7 @@
 	blinded = 0
 	anchored = 1	//  don't get pushed around
 	invisibility = INVISIBILITY_OBSERVER
+	languages = ALL
 	var/can_reenter_corpse
 	var/datum/hud/living/carbon/hud = null // hud
 	var/bootime = 0
@@ -58,10 +59,11 @@ Works together with spawning an observer, noted above.
 
 /mob/proc/ghostize(var/can_reenter_corpse = 1)
 	if(key)
-		var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
-		ghost.can_reenter_corpse = can_reenter_corpse
-		ghost.key = key
-		return ghost
+		if(!cmptext(copytext(key,1,2),"@")) //aghost
+			var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
+			ghost.can_reenter_corpse = can_reenter_corpse
+			ghost.key = key
+			return ghost
 
 /*
 This is the proc mobs get to turn into a ghost. Forked from ghostize due to compatibility issues.
@@ -190,7 +192,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		if(following && following == target)
 			return
 		following = target
-		src << "\blue Now following [target]"
+		src << "<span class='notice'>Now following [target]</span>"
 		spawn(0)
 			var/turf/pos = get_turf(src)
 			while(loc == pos && target && following == target && client)
@@ -248,11 +250,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 /mob/dead/observer/memory()
 	set hidden = 1
-	src << "\red You are dead! You have no mind to store memory!"
+	src << "<span class='danger'>You are dead! You have no mind to store memory!</span>"
 
 /mob/dead/observer/add_memory()
 	set hidden = 1
-	src << "\red You are dead! You have no mind to store memory!"
+	src << "<span class='danger'>You are dead! You have no mind to store memory!</span>"
 
 /mob/dead/observer/verb/toggle_darkness()
 	set name = "Toggle Darkness"
